@@ -1,7 +1,4 @@
-const { request } = require('express');
-const express = require('express');
 const { v4: uuid } = require('uuid');
-const { update } = require('../models/Legend');
 const Legend = require('../models/Legend');
 
 module.exports = {
@@ -78,6 +75,22 @@ module.exports = {
 			});
 		} catch (err) {
 			return res.status(400).json({ error: err.message });
+		}
+	},
+
+	async getLegend(req, res) {
+		const { name } = req.params;
+		try {
+			const legend = await Legend.find({ name });
+
+			if (!legend.length)
+				return res
+					.status(400)
+					.json({ message: 'Legenda não encontrada' });
+
+			return res.status(200).json({ legend });
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
 		}
 	},
 };

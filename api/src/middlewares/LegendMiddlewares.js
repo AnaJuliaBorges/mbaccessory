@@ -1,4 +1,3 @@
-const { response } = require('express');
 const { validate: isUuid } = require('uuid');
 const Legend = require('../models/Legend');
 

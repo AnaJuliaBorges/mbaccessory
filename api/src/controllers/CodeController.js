@@ -1,6 +1,6 @@
-const express = require('express');
 const { v4: uuid } = require('uuid');
 const Codes = require('../models/Codes');
+const Legend = require('../models/Legend');
 
 module.exports = {
 	async getAll(req, res) {
@@ -13,14 +13,8 @@ module.exports = {
 	},
 
 	async store(req, res) {
-		const {
-			category,
-			caracter,
-			description,
-			image,
-			initialQuantity,
-			totalPrice,
-		} = req.body;
+		const { category, description, image, initialQuantity, totalPrice } =
+			req.body;
 
 		if (!category || !description || !initialQuantity || !totalPrice) {
 			return response.status(400).json({
@@ -28,10 +22,105 @@ module.exports = {
 			});
 		}
 
-		const fomattedCode = new Codes({
+		const findLegend = await Legend.find({ name: category });
+		if (!findLegend.length)
+			return res.status(400).json({ error: 'Categoria não encontrada' });
+
+		const legendFound = findLegend[0];
+		const formattedCode =
+			legendFound.code + legendFound.lastId.toString().padStart(4, '0');
+
+		const findCode = await Codes.find({ code: formattedCode });
+		if (findCode.length)
+			return res.status(400).json({ error: 'Código já cadastrado' });
+
+		const item = new Codes({
 			_id: uuid(),
 			category,
 			description,
+			code: formattedCode,
+			image: image || null,
+			initialQuantity,
+			inventory: initialQuantity,
+			totalPrice,
+			unitPrice: totalPrice / initialQuantity,
 		});
+
+		try {
+			legendFound.lastId++;
+			await item.save();
+			await legendFound.save();
+
+			return res.status(200).json({
+				check: item,
+				message: 'Código cadastrado com sucesso',
+			});
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
+		}
+	},
+	async update(req, res) {
+		const { description, image } = req.body;
+
+		if (!description && !image)
+			return res
+				.status(400)
+				.json({ error: 'Descrição ou imagem necessárias' });
+
+		if (description) res.code.description = description;
+		if (image) res.code.image = image;
+
+		try {
+			await res.code.save();
+			return res
+				.status(201)
+				.json({ message: 'Atualização bem sucedida' });
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
+		}
+	},
+
+	async delete(req, res) {
+		try {
+			console.log(res.code);
+			await res.code.remove();
+			return res
+				.status(200)
+				.json({ message: 'codígo removido com sucesso' });
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
+		}
+	},
+
+	async updateStock(req, res) {
+		const { quantity = 1 } = req.body;
+
+		res.code.inventory -= quantity;
+		console.log(res.code);
+		try {
+			await res.code.save();
+			return res.status(200).json({
+				stock: res.code.inventory,
+				message: `Estoque atualizado`,
+			});
+		} catch (err) {
+			return res.status(400).json({ error: err.message });
+		}
+	},
+
+	async getCode(req, res) {
+		const { code } = req.params;
+		try {
+			const codeObject = await Codes.find({ code });
+
+			if (!codeObject.length)
+				return res
+					.status(400)
+					.json({ message: 'Código não encontrado' });
+
+			return res.status(200).json({ code: codeObject });
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
+		}
 	},
 };
