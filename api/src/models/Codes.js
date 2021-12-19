@@ -4,6 +4,7 @@ const codeSchema = new mongoose.Schema({
 	_id: { type: String, required: true },
 	category: { type: String, required: true },
 	description: { type: String, required: true },
+	placePurchase: { tyope: String, required: false },
 	code: { type: String, required: true },
 	image: { type: String, required: false },
 	initialQuantity: { type: Number, required: true },

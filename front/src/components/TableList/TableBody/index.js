@@ -2,10 +2,9 @@ import { FaTimesCircle } from 'react-icons/fa';
 import { BodyRow, TableBodyStyled, DeleteCol } from './styles';
 
 const TableBody = ({ row, columns, deleteFunction }) => {
-	console.log(row.characteristics);
 	return (
 		<tr>
-			{columns.map((col) => (
+			{columns.map(col => (
 				<BodyRow size={col.size}>
 					{typeof row[col.campoAPI] === 'boolean'
 						? row[col.campoAPI]

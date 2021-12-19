@@ -4,17 +4,20 @@ import { Container } from './globalStyle';
 
 import Legend from './pages/Legend';
 import Codes from './pages/Codes';
+import { LegendStorage } from './contexts/legendContext';
 
 const App = () => {
 	return (
 		<BrowserRouter>
 			<Header />
-			<Container>
-				<Routes>
-					<Route path="/" element={<Legend />} />
-					<Route path="/codes" element={<Codes />} />
-				</Routes>
-			</Container>
+			<LegendStorage>
+				<Container>
+					<Routes>
+						<Route path='/' element={<Legend />} />
+						<Route path='/codes' element={<Codes />} />
+					</Routes>
+				</Container>
+			</LegendStorage>
 		</BrowserRouter>
 	);
 };

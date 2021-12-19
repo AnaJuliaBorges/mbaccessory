@@ -6,6 +6,6 @@ export const Container = styled.div`
 
 export const defaulTheme = {
 	colors: {
-		primary: 'green',
+		primary: '#E5BEAD',
 	},
 };
