@@ -7,7 +7,7 @@ module.exports = {
 			const legend = await Legend.find();
 			return res.status(200).json({ legend });
 		} catch (err) {
-			return res.status(500).json({ error: err.message });
+			return res.status(500).send({ error: err.message });
 		}
 	},
 
