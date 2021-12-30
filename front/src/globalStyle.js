@@ -4,8 +4,8 @@ export const Container = styled.div`
 	margin: 5% 10%;
 `;
 
-export const defaulTheme = {
+export const defaultTheme = {
 	colors: {
-		primary: 'green',
+		primary: '#e5bead',
 	},
 };

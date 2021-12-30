@@ -52,7 +52,7 @@ const Legend = () => {
 	};
 
 	useEffect(() => {
-		getLegend();
+		//getLegend();
 	}, []);
 
 	const handleRegister = () => {

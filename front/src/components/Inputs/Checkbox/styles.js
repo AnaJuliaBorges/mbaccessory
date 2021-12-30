@@ -1,7 +1,4 @@
 import styled from 'styled-components';
-import { defaulTheme } from '../../../globalStyle';
-
-const { colors } = defaulTheme;
 
 export const CheckboxStyle = styled.input`
 	&:checked {
