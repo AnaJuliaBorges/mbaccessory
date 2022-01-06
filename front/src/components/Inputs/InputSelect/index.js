@@ -1,9 +1,13 @@
-const InputSelect = ({ options }) => {
-	<select>
+import {InputSelectStyle} from './styles.js';
+
+const InputSelect = ({ options, noSelect, ...props }) => {
+
+return (<InputSelectStyle {...props}>
+		{noSelect && <option key={'none'}>{noSelect}</option>}
 		{options.map((option) => (
-			<option value={option.name}>{option.name}</option>
+			<option key={option.name} value={option.name}>{option.name}</option>
 		))}
-	</select>;
+	</InputSelectStyle>);
 };
 
 export default InputSelect;

@@ -33,5 +33,10 @@ routes.patch(
 	LegendMiddleware.validateId,
 	LegendController.updateLastId
 );
+routes.patch(
+	'/legend/zerar/:id',
+	LegendMiddleware.validateId,
+	LegendController.zerarID
+);
 
 module.exports = routes;

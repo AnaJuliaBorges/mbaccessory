@@ -1,118 +1,109 @@
-import { useEffect, useState } from 'react';
-import api from '../../api';
+import { useContext, useEffect, useState } from 'react';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { ButtonRegister } from '../../components/Inputs/ButtonRegister';
+import InputSelect from '../../components/Inputs/InputSelect';
 import { InputText } from '../../components/Inputs/InputText';
 import Loading from '../../components/Loading';
 import TableList from '../../components/TableList';
 import TableBody from '../../components/TableList/TableBody';
+import { CodeContext } from '../../contexts/codeContext';
+import { LegendContext } from '../../contexts/legendContext';
 import {
 	ContainerInputs,
 	ContainerRegister,
 	HomeContainer,
 	Texts,
 	LabelStyled,
+	FirstLine,
+	SecondLine,
 	LabelInput,
+	LastCode,
+	ContainerCode,
+	ContainerList,
 } from './styles';
 
 const Codes = () => {
-	const [codes, setCodes] = useState([]);
+	const [codeCreated, setCodeCreated] = useState([]);
 
-	const [category, setCategory] = useState('');
-	const [description, setDescription] = useState('');
-	const [initialQuantity, setInitialQuantity] = useState(0);
-	const [totalPrice, setTotalPrice] = useState(0);
-	const [unitPrice, setUnitPrice] = useState(0);
-	const [inventory, setInventory] = useState(0);
+	const {
+		getCodes,
+		createCode,
+		deleteCode,
+		codes,
+		loading,
+		errorMessage,
+		lastCode,
+		setErrorMessage,
+	} = useContext(CodeContext);
+	
+	const { legend, getLegend } = useContext(LegendContext);
 
-	const [errorMessage, setErrorMessage] = useState('');
-	const [loading, setLoading] = useState(false);
+	const handleInput = (e) => {
+		setCodeCreated((curr) => ({ ...curr, [e.target.name]: e.target.value }));
+	};
 
 	const colsCodes = [
 		{ name: 'Código', campoAPI: 'code', size: '10%' },
-		{ name: 'Categoria', campoAPI: 'category', size: '15%' },
-		{ name: 'Descrição', campoAPI: 'description', size: '20%' },
+		{ name: 'Categoria', campoAPI: 'category', size: '10%' },
+		{ name: 'Descrição', campoAPI: 'description', size: '25%' },
+		{ name: 'Local de Compra', campoAPI: 'placePurchase', size: '15%' },
 		{ name: 'Inicial', campoAPI: 'initialQuantity', size: '10%' },
-		{ name: 'Total', campoAPI: 'totalPrice', size: '10%' },
-		{ name: 'Unitário', campoAPI: 'unitPrice', size: '10%' },
+		{ name: 'Total', campoAPI: 'totalPrice', size: '10%', type: 'price' },
+		{ name: 'Unitário', campoAPI: 'unitPrice', size: '10%', type: 'price' },
 		{ name: 'Estoque', campoAPI: 'inventory', size: '10%' },
 	];
 
-	const getCodes = () => {
-		setLoading(true);
+	const categories = [
+		{name: 'Acabamento', categories: ['Ponteira', 'Tulipa']},
+		{name: 'Alfinete', categories: ['Alfinete']},
+		{name: 'Brinco', categories: ['Anzol', 'Argola', 'Pino de brinco', 'Tarracha']},
+		{name: 'Corrente', categories: ['Alongador', 'Arame', 'Cabelo de Anjo', 'Corrente']},
+		{name: 'Elo', categories: ['Elo', 'Terminal']},
+		{name: 'Entremeio', categories: ['Entremeio']},
+		{name: 'Fecho', categories: ['Fecho']},
+		{name: 'Pedraria', categories: ['Pedra', 'Plástico', 'Cristal', 'Acrílico', 'Pérola', 'Resina']},
+		{name: 'Pingente', categories: ['Pingente']},
+		{name: 'Terminal', categories: ['Terminal']},
 
-		api.get('/codes')
-			.then((res) => {
-				setCodes(
-					res.data.codes.sort(
-						(a, b) => (a.code > b.code) - (a.code < b.code)
-					)
-				);
-				console.log(res.data.codes);
-			})
-			.catch((err) => {
-				setErrorMessage(err.response.data.error);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	};
+	]
 
 	useEffect(() => {
+		if(!legend.length) getLegend();
 		getCodes();
-	}, []);
-
-	const handleRegister = () => {
-		setErrorMessage('');
-		setLoading(true);
-
-		api.post('/codes', {
-			category,
-			description,
-			image: null,
-			initialQuantity,
-			totalPrice,
-		})
-			.then((res) => {
-				getCodes();
-			})
-			.catch((err) => {
-				setErrorMessage(err.response.data.error);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	};
-
-	const handleDelete = (id) => {
-		setLoading(true);
-		api.delete(`/codes/${id}`)
-			.then((res) => {
-				getCodes();
-			})
-			.catch((err) => {
-				setErrorMessage(err.response.data.error);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	};
+	}, [])
 
 	return (
 		<HomeContainer>
-			<h2>Legenda</h2>
+			<h2>Códigos</h2>
 			<ContainerRegister>
-				<h4>Registre uma Legenda</h4>
+				<h4>Registre um Código</h4>
 				<ContainerInputs>
 					<Texts>
+						<FirstLine>
+							
 						<LabelStyled>
-							<LabelInput>Descrição</LabelInput>
-							<InputText
-								type="text"
-								placeholder="Descrição"
-								value={description}
+							<LabelInput>Categoria</LabelInput>
+							<InputSelect
+								options={legend.filter(curr => !curr.characteristics)}
+								name="category"
+								value={codeCreated.category}
 								onChange={(e) => {
-									setDescription(e.target.value);
+									console.log('mudou');
+									handleInput(e);
+									setErrorMessage('');
+								}}
+							/>
+						</LabelStyled>
+
+						<LabelStyled>
+							<LabelInput>Característica</LabelInput>
+							<InputSelect
+								noSelect="Nenhuma característica"
+								options={legend.filter(curr => curr.characteristics)}
+								name="characteristics"
+								value={codeCreated.characteristics}
+								onChange={(e) => {
+									handleInput(e);
 									setErrorMessage('');
 								}}
 							/>
@@ -121,11 +112,13 @@ const Codes = () => {
 						<LabelStyled>
 							<LabelInput>Quantidade inicial</LabelInput>
 							<InputText
+								small
 								type="number"
-								placeholder="Quantidade inicial"
-								value={initialQuantity}
+								name="initialQuantity"
+								placeholder="Ex.: 150"
+								value={codeCreated.initialQuantity}
 								onChange={(e) => {
-									setInitialQuantity(e.target.value);
+									handleInput(e);
 									setErrorMessage('');
 								}}
 							/>
@@ -133,21 +126,58 @@ const Codes = () => {
 						<LabelStyled>
 							<LabelInput>Preço total</LabelInput>
 							<InputText
+								small	
 								type="number"
-								placeholder="Preço total"
-								value={totalPrice}
+								name="totalPrice"
+								placeholder="Ex.: 10,25"
+								value={codeCreated.totalPrice}
 								onChange={(e) => {
-									setTotalPrice(e.target.value);
+									handleInput(e);
 									setErrorMessage('');
 								}}
+							/>
+						</LabelStyled>
+						<LabelStyled>
+							<LabelInput>Local de Compra</LabelInput>
+							<InputText
+								name="placePurchase"
+								placeholder="Ex.: Biju junior"
+								value={codeCreated.placePurchase}
+								onChange={(e) => {
+									handleInput(e);
+									setErrorMessage('');
+								}}
+							/>
+						</LabelStyled>
+						</FirstLine>
+						<SecondLine>
+
+						<LabelStyled>
+							<LabelInput>Descrição</LabelInput>
+							<InputText
+								type="text"
+								name="description"
+								placeholder="Ex.: Corrente de bolinha"
+								value={codeCreated.description}
+								onChange={(e) => {
+									handleInput(e);
+									setErrorMessage('');
+								}}
+								style={{width: '500px'}}
 							/>
 						</LabelStyled>
 
 						<ButtonRegister
 							type="onSubmit"
 							name="Registrar"
-							onClick={handleRegister}
+							onClick={() => createCode(codeCreated)}
 						></ButtonRegister>
+
+						<ContainerCode>
+							<LastCode>Último código registrado: <span>{lastCode}</span></LastCode>
+						</ContainerCode>
+
+						</SecondLine>
 					</Texts>
 				</ContainerInputs>
 			</ContainerRegister>
@@ -161,16 +191,28 @@ const Codes = () => {
 				<Loading />
 			) : (
 				<div>
-					<TableList colums={colsCodes}>
-						{codes.map((item) => (
-							<TableBody
-								key={item._id}
-								row={item}
-								columns={colsCodes}
-								deleteFunction={handleDelete}
-							/>
-						))}
-					</TableList>
+					{categories.map((category) => {
+						const codesFiltered = codes.filter(curr => category.categories.includes(curr.category));
+						
+						return <ContainerList>
+							<h3>{category.name}</h3>
+							<hr />
+							{codesFiltered.length ? 
+								<TableList colums={colsCodes}>
+									{codesFiltered.map((item) => (
+										<TableBody
+											key={item._id}
+											row={item}
+											columns={colsCodes}
+											deleteFunction={deleteCode}
+										/>
+									))}
+								</TableList>
+								: <span>Nenhuma matéria prima cadastrada nesta categoria</span>
+							}
+						</ContainerList>
+						
+})}
 				</div>
 			)}
 		</HomeContainer>

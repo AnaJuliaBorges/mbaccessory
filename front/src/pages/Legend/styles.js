@@ -23,3 +23,9 @@ export const Texts = styled.div`
 `;
 
 export const Message = styled.span``;
+
+export const ContainerList = styled.div`
+	display: grid;
+	column-gap: 100px;
+	grid-template-columns: 50% 50%;
+`;

@@ -9,11 +9,11 @@ import TableBody from '../../components/TableList/TableBody';
 import { LegendContext } from '../../contexts/legendContext';
 import {
 	ContainerInputs,
-	ContainerList,
 	ContainerRegister,
 	HomeContainer,
 	Message,
 	Texts,
+	ContainerList,
 } from './styles';
 
 const Legend = () => {
@@ -25,6 +25,7 @@ const Legend = () => {
 		getLegend,
 		createLegend,
 		deleteLegend,
+		zerarIdLegend,
 		legend,
 		loading,
 		errorMessage,
@@ -39,10 +40,11 @@ const Legend = () => {
 	];
 
 	useEffect(() => {
-		//getLegend();
+		getLegend();
 	}, []);
 
 	const handleRegister = () => {
+		console.log({characteristics})
 		createLegend(name, code, characteristics);
 	};
 
@@ -94,18 +96,34 @@ const Legend = () => {
 			{loading ? (
 				<Loading />
 			) : legend.length ? (
-				<div>
-					<TableList colums={colsLegend}>
-						{legend.map(item => (
-							<TableBody
-								key={item._id}
-								row={item}
-								columns={colsLegend}
-								deleteFunction={deleteLegend}
-							/>
-						))}
-					</TableList>
-				</div>
+				<ContainerList>
+					<div>
+						<TableList colums={colsLegend}>
+							{legend.filter(curr => !curr.characteristics).map(item => (
+								<TableBody
+									zeroFunction={zerarIdLegend}
+									key={item._id}
+									row={item}
+									columns={colsLegend}
+									deleteFunction={deleteLegend}
+								/>
+							))}
+						</TableList>
+					</div>
+					<div>
+						<TableList colums={colsLegend}>
+							{legend.filter(curr => curr.characteristics).map(item => (
+								<TableBody
+									zeroFunction={zerarIdLegend}
+									key={item._id}
+									row={item}
+									columns={colsLegend}
+									deleteFunction={deleteLegend}
+								/>
+							))}
+						</TableList>
+					</div>
+				</ContainerList>
 			) : (
 				<Message>Nenhuma legenda cadastrada</Message>
 			)}

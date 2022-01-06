@@ -7,6 +7,7 @@ export const HeaderStyled = styled.header`
 	gap: 40px;
 	padding: 20px 50px;
 	align-items: center;
+	width: 100%;
 `;
 
 export const Logo = styled.img`

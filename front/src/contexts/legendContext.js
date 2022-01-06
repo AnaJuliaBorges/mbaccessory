@@ -63,12 +63,28 @@ export const LegendStorage = ({ children }) => {
 			});
 	};
 
+	const zerarIdLegend = id => {
+		setLoading(true);
+		api.patch(`/legend/zerar/${id}`)
+			.then(res => {
+				console.log({res})
+				getLegend();
+			})
+			.catch(err => {
+				setErrorMessage(err.response.data.error);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	};
+
 	return (
 		<LegendContext.Provider
 			value={{
 				getLegend,
 				createLegend,
 				deleteLegend,
+				zerarIdLegend,
 				legend,
 				loading,
 				errorMessage,

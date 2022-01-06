@@ -18,6 +18,7 @@ export const ContainerInputs = styled.div`
 
 export const Texts = styled.div`
 	display: flex;
+	flex-direction: column;
 	gap: 20px;
 	margin-bottom: 10px;
 `;
@@ -29,4 +30,42 @@ export const LabelStyled = styled.label`
 
 export const LabelInput = styled.span`
 	margin-bottom: 5px;
+`;
+
+export const FirstLine = styled.div`
+	width: 100%;
+	display: flex;
+	gap: 20px;
+`;
+
+export const SecondLine = styled.div`
+	width: 100%;
+	display: flex;
+	gap: 20px;
+	align-items: flex-end;
+`;
+
+export const LastCode = styled.span`
+	
+	& span {
+		font-weight: bold;
+		color: green;
+	}
+`;
+
+export const ContainerCode = styled.div`
+	height: 50px;
+	display: flex;
+	align-items: center;
+`;
+
+export const ContainerList = styled.div`
+	
+	& h3{
+		margin-top: 20px;
+	}
+
+	& hr {
+		margin-bottom: 10px;
+	}
 `;

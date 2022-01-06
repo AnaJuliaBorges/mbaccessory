@@ -1,4 +1,3 @@
-import { FaColumns, FaTimesCircle } from 'react-icons/fa';
 import { HeadRow, TableBody, TableHead, TableStyled } from './styles';
 
 const TableList = ({ colums, children }) => {
@@ -7,7 +6,7 @@ const TableList = ({ colums, children }) => {
 			<TableHead>
 				<tr>
 					{colums.map(column => (
-						<HeadRow size={column.size}>{column.name}</HeadRow>
+						<HeadRow key={column.name} size={column.size}>{column.name}</HeadRow>
 					))}
 					<HeadRow />
 				</tr>

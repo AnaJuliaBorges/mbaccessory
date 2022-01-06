@@ -78,6 +78,18 @@ module.exports = {
 		}
 	},
 
+	async zerarID(req, res) {
+		res.legend.lastId = 0;
+		try {
+			await res.legend.save();
+			return res.status(200).json({
+				message: `Id zerado, novo ID: ${res.legend.lastId}`,
+			});
+		} catch (err) {
+			return res.status(400).json({ error: err.message });
+		}
+	},
+
 	async getLegend(req, res) {
 		const { name } = req.params;
 		try {

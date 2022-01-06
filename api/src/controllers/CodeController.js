@@ -13,22 +13,38 @@ module.exports = {
 	},
 
 	async store(req, res) {
-		const { category, description, image, initialQuantity, totalPrice } =
+		const { category, description, image, initialQuantity, totalPrice, characteristics, placePurchase } =
 			req.body;
 
 		if (!category || !description || !initialQuantity || !totalPrice) {
-			return response.status(400).json({
+			return res.status(400).json({
 				error: 'Categoria, Descrição, Quantidade Inicial e Preço total são obrigatórios',
 			});
 		}
 
+		let initialCode;
 		const findLegend = await Legend.find({ name: category });
+
 		if (!findLegend.length)
 			return res.status(400).json({ error: 'Categoria não encontrada' });
-
+		
 		const legendFound = findLegend[0];
-		const formattedCode =
-			legendFound.code + legendFound.lastId.toString().padStart(4, '0');
+		initialCode = legendFound.code;
+
+		
+		if(characteristics && characteristics != 'Nenhuma característica') {
+			
+			const findCharacteristics = await Legend.find({ name: characteristics });
+			if (!findCharacteristics.length)
+				return res.status(400).json({ error: 'Característica não encontrada' });
+			
+			var characteristicsFound = findCharacteristics[0];
+			initialCode += findCharacteristics[0].code;
+		}
+		
+		const findCodes = await Codes.find({code: {$regex: `^${initialCode}`}});
+		const formattedCode = findCodes.length > 0 ? initialCode + findLastId(findCodes).toString().padStart(3, '0') : 
+								initialCode + '001';		 
 
 		const findCode = await Codes.find({ code: formattedCode });
 		if (findCode.length)
@@ -38,6 +54,7 @@ module.exports = {
 			_id: uuid(),
 			category,
 			description,
+			placePurchase,
 			code: formattedCode,
 			image: image || null,
 			initialQuantity,
@@ -50,11 +67,17 @@ module.exports = {
 			legendFound.lastId++;
 			await item.save();
 			await legendFound.save();
+			
+			if (characteristics) {	
+				characteristicsFound.lastId++;
+				await characteristicsFound.save();
+			}
 
 			return res.status(200).json({
 				check: item,
 				message: 'Código cadastrado com sucesso',
 			});
+			
 		} catch (err) {
 			return res.status(500).json({ error: err.message });
 		}
@@ -82,7 +105,6 @@ module.exports = {
 
 	async delete(req, res) {
 		try {
-			console.log(res.code);
 			await res.code.remove();
 			return res
 				.status(200)
@@ -96,7 +118,6 @@ module.exports = {
 		const { quantity = 1 } = req.body;
 
 		res.code.inventory -= quantity;
-		console.log(res.code);
 		try {
 			await res.code.save();
 			return res.status(200).json({
@@ -119,8 +140,16 @@ module.exports = {
 					.json({ message: 'Código não encontrado' });
 
 			return res.status(200).json({ code: codeObject });
+
 		} catch (err) {
 			return res.status(500).json({ error: err.message });
 		}
 	},
 };
+
+
+const findLastId = (findCodes) => {
+	const findLast = findCodes[findCodes.length-1].code;
+	const lastId = findLast.slice(findLast.length - 3);
+	return parseInt(lastId, 10) + 1 || 0;
+}
