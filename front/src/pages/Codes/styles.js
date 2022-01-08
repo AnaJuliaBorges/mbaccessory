@@ -45,18 +45,12 @@ export const SecondLine = styled.div`
 	align-items: flex-end;
 `;
 
-export const LastCode = styled.span`
-	
-	& span {
-		font-weight: bold;
-		color: green;
-	}
-`;
-
 export const ContainerCode = styled.div`
 	height: 50px;
 	display: flex;
-	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
 `;
 
 export const ContainerList = styled.div`
@@ -67,5 +61,20 @@ export const ContainerList = styled.div`
 
 	& hr {
 		margin-bottom: 10px;
+	}
+`;
+
+export const LastCode = styled.span`
+	
+	& span {
+		font-weight: bold;
+		color: green;
+	}
+`;
+
+export const TotalPrice = styled.span`
+	& span {
+		font-weight: bold;
+		color: red;
 	}
 `;

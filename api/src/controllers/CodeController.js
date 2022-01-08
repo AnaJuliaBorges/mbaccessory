@@ -30,7 +30,6 @@ module.exports = {
 		
 		const legendFound = findLegend[0];
 		initialCode = legendFound.code;
-
 		
 		if(characteristics && characteristics != 'Nenhuma característica') {
 			
@@ -47,7 +46,7 @@ module.exports = {
 								initialCode + '001';		 
 
 		const findCode = await Codes.find({ code: formattedCode });
-		if (findCode.length)
+		if (findCode.length = 0)
 			return res.status(400).json({ error: 'Código já cadastrado' });
 
 		const item = new Codes({

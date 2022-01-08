@@ -8,6 +8,7 @@ import TableList from '../../components/TableList';
 import TableBody from '../../components/TableList/TableBody';
 import { CodeContext } from '../../contexts/codeContext';
 import { LegendContext } from '../../contexts/legendContext';
+import { formatPrice } from '../../utils/functions';
 import {
 	ContainerInputs,
 	ContainerRegister,
@@ -20,10 +21,12 @@ import {
 	LastCode,
 	ContainerCode,
 	ContainerList,
+	TotalPrice,
 } from './styles';
 
 const Codes = () => {
 	const [codeCreated, setCodeCreated] = useState([]);
+	const [totalPrice, setTotalPrice] = useState(0);
 
 	const {
 		getCodes,
@@ -71,6 +74,16 @@ const Codes = () => {
 		if(!legend.length) getLegend();
 		getCodes();
 	}, [])
+	
+	useEffect(() => {
+		let totalPriceSum = 0; 
+		for (let i = 0; i < codes.length; i++) {
+			if(codes[i].description !== 'Miçanga'){
+				totalPriceSum += codes[i].totalPrice;
+			}
+		}
+		setTotalPrice(totalPriceSum);
+	}, [codes])
 
 	return (
 		<HomeContainer>
@@ -141,7 +154,7 @@ const Codes = () => {
 							<LabelInput>Local de Compra</LabelInput>
 							<InputText
 								name="placePurchase"
-								placeholder="Ex.: Biju junior"
+								placeholder="Ex.: Bijunior"
 								value={codeCreated.placePurchase}
 								onChange={(e) => {
 									handleInput(e);
@@ -172,9 +185,9 @@ const Codes = () => {
 							name="Registrar"
 							onClick={() => createCode(codeCreated)}
 						></ButtonRegister>
-
 						<ContainerCode>
 							<LastCode>Último código registrado: <span>{lastCode}</span></LastCode>
+							{codes.length > 0 && <TotalPrice>Valor total de compras: <span>{formatPrice(totalPrice)}</span></TotalPrice>}
 						</ContainerCode>
 
 						</SecondLine>
