@@ -1,0 +1,24 @@
+{
+	"name": "Brinco geométrico pingente ponta",
+    "category": "Brinco",
+    "description": "Brinco de 15 cm geométrico com fio e pingente de aço (5cm)",
+    "collection": null,
+    "line": null,
+    "image": null,
+    "costPrice": 6.56,
+    "initialQuantity": 3,
+    "productionTime": 8.6,
+    "materials": [
+        {
+            "code": "fe001",
+            "quantity": 2,
+            "totalPrice": 0.5
+        }
+    ]
+}
+
+{
+    "name": "Sacola craft",
+    "initialQuantity": 40,
+    "totalPrice": 20,
+}

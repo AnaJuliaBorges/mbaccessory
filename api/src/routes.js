@@ -5,6 +5,8 @@ const CodeController = require('./controllers/CodeController');
 const LegendController = require('./controllers/LegendController');
 const LegendMiddleware = require('./middlewares/LegendMiddlewares');
 const CodesMiddleware = require('./middlewares/CodesMiddleware');
+const InputsController = require('./controllers/InputsController');
+const InputsMiddlewares = require('./middlewares/InputsMiddlewares');
 
 //Codes
 routes.get('/codes', CodeController.getAll);
@@ -17,6 +19,13 @@ routes.patch(
 	CodesMiddleware.validateCode,
 	CodeController.updateStock
 );
+
+//Inputs
+routes.get('/inputs', InputsController.getAll);
+routes.get('/inputs/:name', InputsController.getInput);
+routes.post('/inputs', InputsController.store);
+routes.put('/inputs/:name', InputsMiddlewares.validateInput, InputsController.update);
+routes.delete('/inputs/:name', InputsMiddlewares.validateInput, InputsController.delete);
 
 //Legend
 routes.get('/legend', LegendController.getAll);

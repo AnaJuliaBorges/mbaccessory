@@ -6,6 +6,7 @@ const legendSchema = new mongoose.Schema({
 	code: { type: String, required: true },
 	characteristics: {type: Boolean, required: true},
 	lastId: { type: Number, default: 0 },
+	product: {type: Boolean, default: false}
 });
 
 module.exports = mongoose.model('Legend', legendSchema);
