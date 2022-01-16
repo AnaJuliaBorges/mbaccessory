@@ -29,7 +29,7 @@ export const LegendStorage = ({ children }) => {
 			});
 	};
 
-	const createLegend = (name, code, characteristics) => {
+	const createLegend = (name, code, characteristics, product) => {
 		setErrorMessage('');
 		setLoading(true);
 
@@ -37,6 +37,7 @@ export const LegendStorage = ({ children }) => {
 			name: name.replace(/^\w/, c => c.toUpperCase()),
 			code: code.toUpperCase(),
 			characteristics,
+			product,
 		})
 			.then(res => {
 				getLegend();

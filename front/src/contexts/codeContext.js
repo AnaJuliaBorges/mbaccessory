@@ -39,7 +39,8 @@ export const CodeStorage = ({ children }) => {
 			placePurchase,
 			initialQuantity,
 			totalPrice, 
-			characteristics} = code;
+			oldCode,
+			characteristics, box} = code;
 		
 		api.post('/codes', {
 			category: category || 'Acabamento',
@@ -49,6 +50,8 @@ export const CodeStorage = ({ children }) => {
 			image: null,
 			initialQuantity,
 			totalPrice,
+			oldCode,
+			box,
 		})
 			.then((res) => {
 				setLastCode(res.data.check.code);

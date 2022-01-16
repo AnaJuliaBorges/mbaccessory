@@ -13,10 +13,11 @@ module.exports = {
 	},
 
 	async store(req, res) {
-		const { category, description, image, initialQuantity, totalPrice, characteristics, placePurchase } =
+		const { category, description, image, initialQuantity, totalPrice, characteristics, placePurchase, oldCode, box} =
 			req.body;
 
-		if (!category || !description || !initialQuantity || !totalPrice) {
+		console.log('req', req.body);
+		if (!category || !description || !initialQuantity || !totalPrice || !box) {
 			return res.status(400).json({
 				error: 'Categoria, Descrição, Quantidade Inicial e Preço total são obrigatórios',
 			});
@@ -60,6 +61,8 @@ module.exports = {
 			inventory: initialQuantity,
 			totalPrice,
 			unitPrice: totalPrice / initialQuantity,
+			oldCode,
+			box,
 		});
 
 		try {

@@ -22,6 +22,7 @@ import {
 	ContainerCode,
 	ContainerList,
 	TotalPrice,
+	InputTextArea,
 } from './styles';
 
 const Codes = () => {
@@ -43,30 +44,33 @@ const Codes = () => {
 
 	const handleInput = (e) => {
 		setCodeCreated((curr) => ({ ...curr, [e.target.name]: e.target.value }));
+		console.log(codeCreated)
 	};
 
 	const colsCodes = [
 		{ name: 'Código', campoAPI: 'code', size: '10%' },
+		{ name: 'Código Antigo', campoAPI: 'oldCode', size: '10%' },
 		{ name: 'Categoria', campoAPI: 'category', size: '10%' },
 		{ name: 'Descrição', campoAPI: 'description', size: '25%' },
 		{ name: 'Local de Compra', campoAPI: 'placePurchase', size: '15%' },
-		{ name: 'Inicial', campoAPI: 'initialQuantity', size: '10%' },
-		{ name: 'Total', campoAPI: 'totalPrice', size: '10%', type: 'price' },
-		{ name: 'Unitário', campoAPI: 'unitPrice', size: '10%', type: 'price' },
-		{ name: 'Estoque', campoAPI: 'inventory', size: '10%' },
+		{ name: 'Inicial', campoAPI: 'initialQuantity', size: '8%' },
+		{ name: 'Total', campoAPI: 'totalPrice', size: '8%', type: 'price' },
+		{ name: 'Unitário', campoAPI: 'unitPrice', size: '8%', type: 'price' },
+		{ name: 'Estoque', campoAPI: 'inventory', size: '8%' },
+		{ name: 'Caixa', campoAPI: 'box', size: '8%' },
 	];
 
 	const categories = [
-		{name: 'Acabamento', categories: ['Ponteira', 'Tulipa']},
-		{name: 'Alfinete', categories: ['Alfinete']},
-		{name: 'Brinco', categories: ['Anzol', 'Argola', 'Pino de brinco', 'Tarracha']},
-		{name: 'Corrente', categories: ['Alongador', 'Arame', 'Cabelo de Anjo', 'Corrente']},
-		{name: 'Elo', categories: ['Elo', 'Terminal']},
-		{name: 'Entremeio', categories: ['Entremeio']},
-		{name: 'Fecho', categories: ['Fecho']},
-		{name: 'Pedraria', categories: ['Pedra', 'Plástico', 'Cristal', 'Acrílico', 'Pérola', 'Resina']},
-		{name: 'Pingente', categories: ['Pingente']},
-		{name: 'Terminal', categories: ['Terminal']},
+		{name: 'Acabamento', categories: ['Ponteira', 'Tulipa']}, //MiniCompartimentos
+		{name: 'Alfinete', categories: ['Alfinete']}, //Maleta
+		{name: 'Brinco', categories: ['Anzol', 'Argola', 'Pino de brinco', 'Tarracha', 'Brinco M']}, //Flor
+		{name: 'Corrente', categories: ['Alongador', 'Arame', 'Cabelo de Anjo', 'Corrente']}, //2 Grandes
+		{name: 'Elo', categories: ['Elo', 'Terminal']}, //MiniCompartimento
+		{name: 'Entremeio', categories: ['Entremeio']}, //MiniCompartimento
+		{name: 'Fecho', categories: ['Fecho']}, //MiniCompartimento
+		{name: 'Pedraria', categories: ['Pedra', 'Plástico', 'Cristal', 'Acrílico', 'Pérola', 'Resina']}, //Pedras não redondas caixa média, Pérolas, Cristal facetado e redondos caixa movel
+		{name: 'Pingente', categories: ['Pingente']}, //Caixa de pingente
+		{name: 'Terminal', categories: ['Terminal']}, //MiniCompartimento
 
 	]
 
@@ -97,7 +101,7 @@ const Codes = () => {
 						<LabelStyled>
 							<LabelInput>Categoria</LabelInput>
 							<InputSelect
-								options={legend.filter(curr => !curr.characteristics)}
+								options={legend.filter(curr => !curr.characteristics && !curr.product)}
 								name="category"
 								value={codeCreated.category}
 								onChange={(e) => {
@@ -162,12 +166,36 @@ const Codes = () => {
 								}}
 							/>
 						</LabelStyled>
+						<LabelStyled>
+							<LabelInput>Caixa</LabelInput>
+							<InputText
+								name="box"
+								placeholder="Ex.: 1"
+								value={codeCreated.box}
+								onChange={(e) => {
+									handleInput(e);
+									setErrorMessage('');
+								}}
+							/>
+						</LabelStyled>
 						</FirstLine>
 						<SecondLine>
-
+						<LabelStyled>
+							<LabelInput>Código antigo</LabelInput>
+							<InputText
+								name="oldCode"
+								placeholder="FEASDAS12"
+								value={codeCreated.oldCode}
+								onChange={(e) => {
+									handleInput(e);
+									setErrorMessage('');
+								}}
+							/>
+						</LabelStyled>
+						
 						<LabelStyled>
 							<LabelInput>Descrição</LabelInput>
-							<InputText
+							<InputTextArea
 								type="text"
 								name="description"
 								placeholder="Ex.: Corrente de bolinha"
@@ -176,9 +204,10 @@ const Codes = () => {
 									handleInput(e);
 									setErrorMessage('');
 								}}
-								style={{width: '500px'}}
 							/>
 						</LabelStyled>
+
+						
 
 						<ButtonRegister
 							type="onSubmit"

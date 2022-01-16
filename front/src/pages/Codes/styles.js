@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { InputText } from '../../components/Inputs/InputText';
 
 export const HomeContainer = styled.div`
 	& h2 {
@@ -77,4 +78,8 @@ export const TotalPrice = styled.span`
 		font-weight: bold;
 		color: red;
 	}
+`;
+
+export const InputTextArea = styled(InputText)`
+	width: 500px
 `;

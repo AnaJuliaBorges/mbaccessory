@@ -11,6 +11,8 @@ const codeSchema = new mongoose.Schema({
 	inventory: { type: Number, required: true },
 	totalPrice: { type: Number, required: true },
 	unitPrice: { type: Number, required: true },
+	oldCode: {type : String, required: false },
+	box: {type: String, required: true}
 });
 
 module.exports = mongoose.model('Codes', codeSchema);

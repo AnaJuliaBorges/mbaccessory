@@ -12,9 +12,9 @@ module.exports = {
 	},
 
 	async store(req, res) {
-		const { name, code } = req.body;
+		const { name, code, characteristics, product } = req.body;
 
-		if (!name || !code) {
+		if (!name || !code ) {
 			return res
 				.status(400)
 				.json({ error: 'nome e código são obrigatórios' });
@@ -24,6 +24,8 @@ module.exports = {
 			_id: uuid(),
 			name,
 			code,
+			characteristics,
+			product,
 		});
 
 		try {

@@ -14,12 +14,15 @@ import {
 	Message,
 	Texts,
 	ContainerList,
+	CheckboxContainer,
+	SectionTitle,
 } from './styles';
 
 const Legend = () => {
 	const [name, setName] = useState('');
 	const [code, setCode] = useState('');
 	const [characteristics, setCharacteristics] = useState(false);
+	const [product, setProduct] = useState(false);
 
 	const {
 		getLegend,
@@ -33,10 +36,10 @@ const Legend = () => {
 	} = useContext(LegendContext);
 
 	const colsLegend = [
-		{ name: 'Nome', campoAPI: 'name', size: '27%' },
-		{ name: 'Código', campoAPI: 'code', size: '20%' },
-		{ name: 'Último', campoAPI: 'lastId', size: '20%' },
-		{ name: 'Característica', campoAPI: 'characteristics', size: '30%' },
+		{ name: 'Nome', campoAPI: 'name', size: '40%' },
+		{ name: 'Código', campoAPI: 'code', size: '30%' },
+		{ name: 'Último', campoAPI: 'lastId', size: '30%' },
+		
 	];
 
 	useEffect(() => {
@@ -45,7 +48,7 @@ const Legend = () => {
 
 	const handleRegister = () => {
 		console.log({characteristics})
-		createLegend(name, code, characteristics);
+		createLegend(name, code, characteristics, product);
 	};
 
 	return (
@@ -80,12 +83,22 @@ const Legend = () => {
 						></ButtonRegister>
 					</Texts>
 
-					<Checkbox
-						name='É uma característica'
-						checked={characteristics}
-						onClick={() => setCharacteristics(!characteristics)}
-					/>
+					<CheckboxContainer>
+						<Checkbox
+							name='É uma característica'
+							checked={characteristics}
+							onClick={() => setCharacteristics(!characteristics)}
+						/>
+
+						<Checkbox
+							name='É um produto'
+							checked={product}
+							onClick={() => setProduct(!product)}
+						/>
+					</CheckboxContainer>
+
 				</ContainerInputs>
+
 			</ContainerRegister>
 			{errorMessage && (
 				<ErrorMessage>
@@ -98,6 +111,7 @@ const Legend = () => {
 			) : legend.length ? (
 				<ContainerList>
 					<div>
+						<SectionTitle>Matéria Prima</SectionTitle><hr/>
 						<TableList colums={colsLegend}>
 							{legend.filter(curr => !curr.characteristics).map(item => (
 								<TableBody
@@ -111,8 +125,22 @@ const Legend = () => {
 						</TableList>
 					</div>
 					<div>
+						<SectionTitle>Características</SectionTitle><hr/>
 						<TableList colums={colsLegend}>
 							{legend.filter(curr => curr.characteristics).map(item => (
+								<TableBody
+									zeroFunction={zerarIdLegend}
+									key={item._id}
+									row={item}
+									columns={colsLegend}
+									deleteFunction={deleteLegend}
+								/>
+							))}
+						</TableList>
+
+						<SectionTitle>Produtos</SectionTitle><hr/>
+						<TableList colums={colsLegend}>
+							{legend.filter(curr => curr.product).map(item => (
 								<TableBody
 									zeroFunction={zerarIdLegend}
 									key={item._id}

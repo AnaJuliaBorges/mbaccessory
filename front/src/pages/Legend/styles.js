@@ -22,10 +22,20 @@ export const Texts = styled.div`
 	margin-bottom: 10px;
 `;
 
+export const CheckboxContainer = styled.div`
+	display: flex;
+	gap: 20px;
+`;
+
 export const Message = styled.span``;
 
 export const ContainerList = styled.div`
 	display: grid;
 	column-gap: 100px;
 	grid-template-columns: 50% 50%;
+`;
+
+export const SectionTitle = styled.h3`
+	margin: 20px 0px;
+	font-size: 25px;
 `;
