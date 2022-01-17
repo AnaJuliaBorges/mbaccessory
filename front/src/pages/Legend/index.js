@@ -113,7 +113,7 @@ const Legend = () => {
 					<div>
 						<SectionTitle>Matéria Prima</SectionTitle><hr/>
 						<TableList colums={colsLegend}>
-							{legend.filter(curr => !curr.characteristics).map(item => (
+							{legend.filter(curr => !curr.characteristics && !curr.product).map(item => (
 								<TableBody
 									zeroFunction={zerarIdLegend}
 									key={item._id}

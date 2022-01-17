@@ -28,6 +28,7 @@ import {
 const Codes = () => {
 	const [codeCreated, setCodeCreated] = useState([]);
 	const [totalPrice, setTotalPrice] = useState(0);
+	const [totalUnitQuantity, setTotalUnitQuantity] = useState(0);
 
 	const {
 		getCodes,
@@ -63,9 +64,9 @@ const Codes = () => {
 	const categories = [
 		{name: 'Acabamento', categories: ['Ponteira', 'Tulipa']}, //MiniCompartimentos
 		{name: 'Alfinete', categories: ['Alfinete']}, //Maleta
-		{name: 'Brinco', categories: ['Anzol', 'Argola', 'Pino de brinco', 'Tarracha', 'Brinco M']}, //Flor
+		{name: 'Brinco', categories: ['Brinco M']}, //Flor
 		{name: 'Corrente', categories: ['Alongador', 'Arame', 'Cabelo de Anjo', 'Corrente']}, //2 Grandes
-		{name: 'Elo', categories: ['Elo', 'Terminal']}, //MiniCompartimento
+		{name: 'Elo', categories: ['Elo']}, //MiniCompartimento
 		{name: 'Entremeio', categories: ['Entremeio']}, //MiniCompartimento
 		{name: 'Fecho', categories: ['Fecho']}, //MiniCompartimento
 		{name: 'Pedraria', categories: ['Pedra', 'Plástico', 'Cristal', 'Acrílico', 'Pérola', 'Resina']}, //Pedras não redondas caixa média, Pérolas, Cristal facetado e redondos caixa movel
@@ -81,12 +82,15 @@ const Codes = () => {
 	
 	useEffect(() => {
 		let totalPriceSum = 0; 
+		let totalQuantity = 0; 
 		for (let i = 0; i < codes.length; i++) {
 			if(codes[i].description !== 'Miçanga'){
 				totalPriceSum += codes[i].totalPrice;
+				totalQuantity++;
 			}
 		}
 		setTotalPrice(totalPriceSum);
+		setTotalUnitQuantity(totalQuantity);
 	}, [codes])
 
 	return (
@@ -257,6 +261,8 @@ const Codes = () => {
 })}
 				</div>
 			)}
+			<hr />
+			<span style={{float: 'right', marginTop: '10px'}}>Total: {totalUnitQuantity}</span>
 		</HomeContainer>
 	);
 };
