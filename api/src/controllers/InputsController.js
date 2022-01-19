@@ -12,7 +12,7 @@ module.exports = {
 	},
 
 	async store(req, res) {
-		const { name, initialQuantity, totalPrice } = req.body;
+		const { name, initialQuantity, totalPrice, description, active } = req.body;
 
 		if (!name || !initialQuantity || !totalPrice) {
 			return res
@@ -28,9 +28,11 @@ module.exports = {
 		const item = new Input({
 			_id: uuid(),
 			name,
+			description,
 			initialQuantity,
 			inventory: initialQuantity,
 			totalPrice,
+			active,
 			unitPrice: totalPrice / initialQuantity
 		});
 
@@ -59,6 +61,33 @@ module.exports = {
 			return res
 				.status(201)
 				.json({ message: 'Atualização bem sucedida' });
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
+		}
+	},
+
+	
+	async updateActive(req, res) {
+		res.input.active = !res.input.active;
+
+		try {
+			await res.input.save();
+			return res
+				.status(201)
+				.json({ message: 'Atualização bem sucedida' });
+		} catch (err) {
+			return res.status(500).json({ error: err.message });
+		}
+	},
+
+	async updateInventory(req, res) {
+		res.input.inventory -= 1;
+
+		try {
+			await res.input.save();
+			return res
+				.status(201)
+				.json({ message: `Estoque da(o) ${res.input.name} atualizado` });
 		} catch (err) {
 			return res.status(500).json({ error: err.message });
 		}

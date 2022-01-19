@@ -7,6 +7,7 @@ const LegendMiddleware = require('./middlewares/LegendMiddlewares');
 const CodesMiddleware = require('./middlewares/CodesMiddleware');
 const InputsController = require('./controllers/InputsController');
 const InputsMiddlewares = require('./middlewares/InputsMiddlewares');
+const ProductController = require('./controllers/ProductController');
 
 //Codes
 routes.get('/codes', CodeController.getAll);
@@ -20,12 +21,26 @@ routes.patch(
 	CodeController.updateStock
 );
 
+//Products
+routes.get('/products', ProductController.getAll);
+//routes.get('/products/:code', ProductController.getCode);
+routes.post('/products', ProductController.store);
+//routes.put('/products/:id', ProductsMiddleware.validateId, CodeController.update);
+//routes.delete('/products/:id', ProductsMiddleware.validateId, CodeController.delete);
+// routes.patch(
+// 	'/products/:code',
+// 	ProductsMiddleware.validateCode,
+// 	CodeController.updateStock
+//);
+
 //Inputs
 routes.get('/inputs', InputsController.getAll);
 routes.get('/inputs/:name', InputsController.getInput);
 routes.post('/inputs', InputsController.store);
 routes.put('/inputs/:name', InputsMiddlewares.validateInput, InputsController.update);
-routes.delete('/inputs/:name', InputsMiddlewares.validateInput, InputsController.delete);
+routes.patch('/inputs/active/:name', InputsMiddlewares.validateInput, InputsController.updateActive);
+routes.patch('/inputs/inventory/:name', InputsMiddlewares.validateInput, InputsController.updateInventory);
+routes.delete('/inputs/:id', InputsMiddlewares.validateId, InputsController.delete);
 
 //Legend
 routes.get('/legend', LegendController.getAll);

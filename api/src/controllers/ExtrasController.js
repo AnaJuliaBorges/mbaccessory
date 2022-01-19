@@ -62,7 +62,7 @@ module.exports = {
 		} catch (err) {
 			return res.status(500).json({ error: err.message });
 		}
-	},
+	},	
 
 	async delete(req, res) {
 		try {

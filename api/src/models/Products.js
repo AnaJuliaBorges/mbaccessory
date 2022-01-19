@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
 	inventory: { type: Number, required: true },
 	productionTime: { type: Number, required: true },
 	salePrice: { type: Number, required: true },
-	materials: { type: array, items: Materials, required: true },
+	materials: { type: [Materials], required: true },
 });
 
 module.exports = mongoose.model('Product', productSchema);
