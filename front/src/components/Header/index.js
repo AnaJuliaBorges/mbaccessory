@@ -8,6 +8,7 @@ const Header = () => {
 		<ButtonContainer>
 			<LinkStyled to="/">Legendas</LinkStyled>
 			<LinkStyled to="codes">Códigos</LinkStyled>
+			<LinkStyled to="extras">Extras</LinkStyled>
 		</ButtonContainer>
 	</HeaderStyled>);
 };

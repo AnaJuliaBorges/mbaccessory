@@ -2,60 +2,23 @@ import { createContext } from 'react';
 import { useState } from 'react';
 import api from '../api';
 
-export const CodeContext = createContext();
+export const ExtrasContext = createContext();
 
-export const CodeStorage = ({ children }) => {
-	const [codes, setCodes] = useState([]);
+export const ExtraStorage = ({ children }) => {
+	const [extras, setExtras] = useState([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [lastCode, setLastCode] = useState('');
 
-	const getCodes = () => {
+	const getExtras = () => {
 		setLoading(true);
 
-		api.get('/codes')
+		api.get('/inputs')
 			.then((res) => {
-				setCodes(
-					res.data.codes.sort(
+				setExtras(
+					res.data.input.sort(
 						(a, b) => (a.code > b.code) - (a.code < b.code)
 					)
 				);
-			})
-			.catch((err) => {
-				setErrorMessage(err.message);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	};
-
-	const createCode = (code) => {
-		setErrorMessage('');
-		setLoading(true);
-
-		const {
-			category,
-			description,
-			placePurchase,
-			initialQuantity,
-			totalPrice, 
-			oldCode,
-			characteristics, box} = code;
-		
-		api.post('/codes', {
-			category: category || 'Acabamento',
-			characteristics,
-			description,
-			placePurchase,
-			image: null,
-			initialQuantity,
-			totalPrice,
-			oldCode,
-			box,
-		})
-			.then((res) => {
-				setLastCode(res.data.check.code);
-				getCodes();
 			})
 			.catch((err) => {
 				setErrorMessage(err.response.data.error);
@@ -65,11 +28,42 @@ export const CodeStorage = ({ children }) => {
 			});
 	};
 
-	const deleteCode = (id) => {
+	const createExtra = (extra) => {
+		setErrorMessage('');
 		setLoading(true);
-		api.delete(`/codes/${id}`)
+
+		const {
+			name,
+			description = null,
+			active = true,
+			initialQuantity,
+			totalPrice
+		} = extra;
+
+		api.post('/inputs', {
+			name,
+			description,
+			active,
+			initialQuantity,
+			totalPrice
+		})
 			.then((res) => {
-				getCodes();
+				getExtras();
+			})
+			.catch((err) => {
+				console.log({err});
+				setErrorMessage(err.message);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	};
+
+	const deleteExtra = (name) => {
+		setLoading(true);
+		api.delete(`/inputs/${name}`)
+			.then((res) => {
+				getExtras();
 			})
 			.catch((err) => {
 				setErrorMessage(err.response.data.error);
@@ -80,19 +74,18 @@ export const CodeStorage = ({ children }) => {
 	};
 
 	return (
-		<CodeContext.Provider
+		<ExtrasContext.Provider
 			value={{
-				getCodes,
-				createCode,
-				deleteCode,
-				codes,
+				getExtras,
+				createExtra,
+				deleteExtra,
+				extras,
 				loading,
 				errorMessage,
-				lastCode,
 				setErrorMessage,
 			}}
 		>
 			{children}
-		</CodeContext.Provider>
+		</ExtrasContext.Provider>
 	);
 };

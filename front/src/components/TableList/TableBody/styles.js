@@ -17,3 +17,9 @@ export const ZeroCol = styled.td`
 	cursor: pointer;
 	margin-left: 10px;
 `;
+
+export const TableLine = styled.tr`
+	&:hover{
+		background-color: aliceblue;
+	}
+`;

@@ -22,7 +22,7 @@ export const LegendStorage = ({ children }) => {
 			})
 			.catch(err => {
 				console.log(err);
-				setErrorMessage(err.response.data.error);
+				setErrorMessage(err.message);
 			})
 			.finally(() => {
 				setLoading(false);

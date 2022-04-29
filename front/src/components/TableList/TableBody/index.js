@@ -1,10 +1,10 @@
 import { FaTimesCircle, FaBan } from 'react-icons/fa';
-import { BodyRow, DeleteCol, ZeroCol } from './styles';
+import { BodyRow, DeleteCol, ZeroCol, TableLine } from './styles';
 import {formatPrice} from '../../../utils/functions'
 
 const TableBody = ({ row, columns, deleteFunction, zeroFunction }) => {
 	return (
-		<tr>
+		<TableLine>
 			{columns.map(col => (
 				<BodyRow key={col.name} size={col.size}>
 					{typeof row[col.campoAPI] === 'boolean'
@@ -24,7 +24,7 @@ const TableBody = ({ row, columns, deleteFunction, zeroFunction }) => {
 					</ZeroCol>
 			}
 
-		</tr>
+		</TableLine>
 	);
 };
 
