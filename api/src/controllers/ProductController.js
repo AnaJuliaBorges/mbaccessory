@@ -13,12 +13,13 @@ module.exports = {
 	},
 
 	async store(req, res) {
-		const {name, category, description, collection, line, image, costPrice, initialQuantity, productionTime, materials } =
+		const {name, category, description, collectionMb, image, costPrice, initialQuantity, productionTime, materials } =
 			req.body;
 
-		if (!name || !image || !category || !description || !initialQuantity || !costPrice || !productionTime || !materials) {
+            console.log(req.body)
+		if (!name || !image || !category || !description || !initialQuantity || !costPrice || !productionTime || !collectionMb || !materials) {
 			return res.status(400).json({
-				error: 'Nome, Imagem, Categoria, Descrição, Quantidade Inicial e Preço de custo, Tempo de produção e materiais são obrigatórios',
+				error: 'Nome, Imagem, Categoria, Descrição, Quantidade Inicial, Coleção e Preço de custo, Tempo de produção e materiais são obrigatórios',
 			});
 		}
 
@@ -46,11 +47,10 @@ module.exports = {
 			image: image || null,
 			initialQuantity,
 			inventory: initialQuantity,
-			collection,
-			line,
+			collectionMb,
 			costPrice,
 			productionTime,
-			salePrice,
+			salePrice: costPrice,
 			materials
 		});
 
